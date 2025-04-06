@@ -20,10 +20,10 @@ jobs:
           dotnet-version: 8.x
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore ./LadeBrik/LadeBrik.csproj
 
       - name: Build
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release ./LadeBrik/LadeBrik.csproj
 
       - name: Install EF Core CLI
         run: dotnet tool install --global dotnet-ef
@@ -32,7 +32,7 @@ jobs:
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Apply EF Core Migrations
-        run: dotnet ef database update --connection "$EF_SQL_CONNECTIONSTRING"
+        run: dotnet ef database update --project ./LadeBrik/LadeBrik.csproj --connection "$EF_SQL_CONNECTIONSTRING"
         env:
           EF_SQL_CONNECTIONSTRING: ${{ secrets.EF_SQL_CONNECTIONSTRING }}
       
