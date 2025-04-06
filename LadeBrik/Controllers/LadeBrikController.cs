@@ -56,7 +56,7 @@ public class LadeBrikController : ControllerBase
             }
             else
             {
-                return StatusCode(404);
+                return NotFound();
             }
         }
         catch (Exception ex)
@@ -74,7 +74,7 @@ public class LadeBrikController : ControllerBase
             var success = _LadeBrikService.BlockLadeBrik(id);
             if (!success)
             {
-                return StatusCode(404);
+                return NotFound();
             }
             else
             {
