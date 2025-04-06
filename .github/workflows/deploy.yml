@@ -31,8 +31,8 @@ jobs:
     - name: Publish
       run: dotnet publish -c Release -o ${{ github.workspace }}/publish
 
-     name: Set environment variable for connection string
-     run: echo "LadeBrikDb=${{ secrets.EF_SQL_CONNECTIONSTRING }}" >> $GITHUB_ENV
+    - name: Set environment variable for connection string
+      run: echo "LadeBrikDb=${{ secrets.EF_SQL_CONNECTIONSTRING }}" >> $GITHUB_ENV
       env:
       PRODUCTION_CONNECTION_STRING: ${{ secrets.EF_SQL_CONNECTIONSTRING }}
 
@@ -43,7 +43,7 @@ jobs:
         slot-name: 'production'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: ${{ github.workspace }}/publish
-        
+
       env:
         AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         PRODUCTION_CONNECTION_STRING: ${{ secrets.EF_SQL_CONNECTIONSTRING }}
