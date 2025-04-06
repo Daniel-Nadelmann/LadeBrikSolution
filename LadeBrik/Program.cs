@@ -11,6 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILadeBrikService, LadeBrikService>();
+var connectionString = builder.Configuration.GetConnectionString("LadeBrikDb") ??
+                       Environment.GetEnvironmentVariable("LadeBrikDb");
+
 builder.Services.AddDbContext<LadeBrikDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("LadeBrikDb")));
 
@@ -18,11 +21,11 @@ builder.Services.AddDbContext<LadeBrikDbContext>(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 

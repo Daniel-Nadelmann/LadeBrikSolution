@@ -31,6 +31,11 @@ jobs:
     - name: Publish
       run: dotnet publish -c Release -o ${{ github.workspace }}/publish
 
+     name: Set environment variable for connection string
+     run: echo "LadeBrikDb=${{ secrets.EF_SQL_CONNECTIONSTRING }}" >> $GITHUB_ENV
+      env:
+      PRODUCTION_CONNECTION_STRING: ${{ secrets.EF_SQL_CONNECTIONSTRING }}
+
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
@@ -38,14 +43,7 @@ jobs:
         slot-name: 'production'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: ${{ github.workspace }}/publish
-
-    - name: Swap connection string
-      run: |
-        az webapp config connection-string set \
-          --resource-group dna-case \
-          --name ChargingChip \
-          --settings "LadeBrikDb=${{ secrets.EF_SQL_CONNECTIONSTRING }}" \
-          --connection-string-type SQLAzure
+        
       env:
         AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         PRODUCTION_CONNECTION_STRING: ${{ secrets.EF_SQL_CONNECTIONSTRING }}
