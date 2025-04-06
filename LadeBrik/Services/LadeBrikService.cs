@@ -42,7 +42,9 @@ public class LadeBrikService : ILadeBrikService
             var existingChip = _LadeBrikDbContext.LadeBriks.Find(id);
             if (existingChip != null)
             {
-                return existingChip;
+               var exception = new BadHttpRequestException("LadeBrik with the same ID already exists.", StatusCodes.Status400BadRequest);
+                _logger.LogError(exception, exception.Message);
+                throw (exception);
             }
 
             var newChip = new LadeBrikModel

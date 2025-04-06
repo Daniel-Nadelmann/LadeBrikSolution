@@ -24,7 +24,7 @@ public class LadeBrikControllerTests
     [Test]
     public void Create_ShouldReturnBadRequestIfTagIsInvalid()
     {
-        var result = _controller.Create("short");
+        var result = _controller.Create(123);
 
         Assert.IsInstanceOf<BadRequestObjectResult>(result);
     }
@@ -32,7 +32,7 @@ public class LadeBrikControllerTests
     [Test]
     public void Create_ShouldReturnOkIfTagIsValid()
     {
-        var tag = "1234567890";
+        var tag = 1234567890;
         var formattedTag = $"dk-{tag}-clever";
         var chip = new LadeBrikModel { Id = formattedTag, Active = true };
         _serviceMock.Setup(s => s.CreateLadeBrik(formattedTag)).Returns(chip);

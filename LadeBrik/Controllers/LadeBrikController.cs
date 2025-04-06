@@ -18,15 +18,16 @@ public class LadeBrikController : ControllerBase
     }
 
     [HttpPost("Create")]
-    public IActionResult Create(string tag)
+    public IActionResult Create(long tag)
     {
-        if (string.IsNullOrEmpty(tag) || tag.Length != 10)
+        var tagString = tag.ToString();
+        if (string.IsNullOrEmpty(tagString) || tagString.Length != 10)
         {
-            _logger.LogWarning("Invalid tag: {Tag}. Tag must be a string of exactly 10 characters.", tag);
+            _logger.LogWarning("Invalid tag: {Tag}. Tag must be a string of exactly 10 characters.", tagString);
             return BadRequest("Tag must be a string of exactly 10 characters.");
         }
 
-        var formattedTag = $"dk-{tag}-clever";
+        var formattedTag = $"dk-{tagString}-clever";
         try
         {
             var LadeBrik = _LadeBrikService.CreateLadeBrik(formattedTag);
@@ -34,6 +35,10 @@ public class LadeBrikController : ControllerBase
         }
         catch (Exception ex)
         {
+            if (ex is BadHttpRequestException)
+            {
+                return BadRequest(ex.Message);
+            }
             _logger.LogError(ex, "Error creating charging chip");
             return StatusCode(500);
         }
