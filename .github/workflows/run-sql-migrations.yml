@@ -1,0 +1,38 @@
+name: Deploy EF Core Migrations
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  ef-migrate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release
+
+      - name: Install EF Core CLI
+        run: dotnet tool install --global dotnet-ef
+
+      - name: Add EF Core tools to path
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Apply EF Core Migrations
+        run: dotnet ef database update --connection "$EF_SQL_CONNECTIONSTRING"
+        env:
+          EF_SQL_CONNECTIONSTRING: ${{ secrets.EF_SQL_CONNECTIONSTRING }}
+      
