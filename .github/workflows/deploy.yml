@@ -33,8 +33,6 @@ jobs:
 
     - name: Set environment variable for connection string
       run: echo "LadeBrikDb=${{ secrets.EF_SQL_CONNECTIONSTRING }}" >> $GITHUB_ENV
-      env:
-      PRODUCTION_CONNECTION_STRING: ${{ secrets.EF_SQL_CONNECTIONSTRING }}
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
